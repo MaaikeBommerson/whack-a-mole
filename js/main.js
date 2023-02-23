@@ -83,6 +83,7 @@ const getRandomHole = () => {
 /// mole
 const createMole = () => {
     const img = document.createElement('img')
+    img.classList.remove('mole')
     img.classList.add('mole')
     img.src = MOLE
 
@@ -111,16 +112,19 @@ const main = () => {
 let countDownTimerId
 
 function startGame() {
+    score = 0
+    scoreBoard.textContent = score
+    speed = SPEED_START
+    speedBoard.textContent = getSpeedText(speed) 
+    time = 60
+
     content.style.display = 'block'
     button.style.display= 'none'
-    
-    score = 0
-    speed = SPEED_START
-    time = 60
-    countDownTimerId = setInterval(countDown, 1000)
-    main()  
-}
 
+    countDownTimerId = setInterval(countDown, 1000)
+    
+}
+main()  
 
 
 
