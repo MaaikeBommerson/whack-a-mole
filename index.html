@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Stylesheet inladen -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Whack-a-Mole</title>
+</head>
+<body>
+    <!-- scoreboard -->
+    <div class="info">
+        <div class="box">
+            <div>
+                <h2>Speed</h2>
+                <div class="speed">SLOW</div>
+            </div>
+        </div>
+        <div class="box">
+            <div>
+                <h2>Score</h2>
+                <div class="score">0</div>
+            </div>
+        </div>
+        <div class="box">
+            <div>
+                <h2>Time left</h2>
+                <div class="timer">60s</div>
+            </div>
+        </div>
+    </div>
+
+    <button id="button" class="button" onclick="startGame()">START!</button>
+
+    <!-- Molshopen -->
+    <div class="content" id="content">
+        <div class="board">
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+            <div class="hole"></div>
+        </div>
+        <div class="hammer"></div>
+    </div>
+
+    <!-- Logo overlay -->
+    <div class="logo"></div>
+
+    <!-- gamescript inlezen -->
+    <script src="./js/main.js"></script>
+</body>
+</html>
