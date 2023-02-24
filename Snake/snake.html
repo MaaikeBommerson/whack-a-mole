@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Snake Game</title>
+    <style>
+        #gameboard {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #CCC;
+        }
+        #scoreboard {
+            text-align: center;
+            font-size: 80px;
+            font-family: 'arial';
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hier staat score -->
+    <div id="scoreboard">0</div>
+    <!-- tekengebied waar het spel in draait -->
+    <canvas id="gameboard" width="400" height="400"></canvas>
+    
+    <script>
+        // variabelen
+        let score = 0
+        const SCORE_ADDITION = 100
+        const scoreBoard = document.getElementById('scoreboard')
+        
+        const PIXEL_SIZE = 10
+
+        const gameboard = document.getElementById('gameboard')
+        const snakeboard = gameboard.getContext('2d')
+
+        const FOOD_COLOR = 'orange'
+        let foodX, foodY
+        let foodEaten = true
+
+        const SNAKE_SPEED = 100
+
+        // generieke functies
+        const drawPixel = (x, y, color) => {
+            snakeboard.fillStyle = color
+            snakeboard.fillRect(x, y, PIXEL_SIZE, PIXEL_SIZE)
+        }
+        
+        const randomPosition = (max) => {
+            let randomNumber = (Math.random() * max) / PIXEL_SIZE
+            let position = Math.round(randomNumber) * PIXEL_SIZE
+            return(position)
+        }
+
+        const drawGrid = () => {
+            for(let i = 0; i < gameboard.height; i += PIXEL_SIZE) {
+                for(let j = 0; j < gameboard.width; j+= PIXEL_SIZE) {
+                    snakeboard.strokeStyle = "rgba(0,0,0,0.05)"
+                    snakeboard.strokeRect(i, j, PIXEL_SIZE, PIXEL_SIZE)
+                }
+            }
+        }
+
+        const clearBoard = () => {
+            snakeboard.clearRect(0,0, gameboard.width, gameboard.height)
+        }
+
+        // score
+        const updateScore = () => {
+            score += SCORE_ADDITION
+            scoreBoard.innerHTML = score
+        }
+
+        // food
+        const drawFood = () => {
+            if (foodEaten) {
+                foodX = randomPosition(gameboard.width - PIXEL_SIZE)
+                foodY = randomPosition(gameboard.height - PIXEL_SIZE)
+                foodEaten = false
+            }
+            drawPixel(foodX, foodY, FOOD_COLOR)
+        }
+        
+        // snake
+        let snake = [
+            {
+                x: Math.round(gameboard.width / 2),
+                y: Math.round(gameboard.height / 2)
+            },
+        ];
+
+        const SNAKE_HEAD = 'darkgreen'
+        const SNAKE_BODY = 'lightgreen'
+
+        //richting
+        let dirX = PIXEL_SIZE
+        let dirY= 0
+
+        const initSnake = () => {
+            for(let i = 1; i < 5; i++) {
+                snake.push({ x: (snake[0].x - (i*PIXEL_SIZE)), y: snake[0].y})
+            }
+        }
+
+        const drawSnake = () => {
+            snake.forEach((snakePart, index) => { 
+                let color = index === 0 ? SNAKE_HEAD : SNAKE_BODY
+                drawPixel(snakePart.x, snakePart.y, color)
+            })
+        }
+
+        const moveSnake = () => {
+            let head = {x: snake[0].x + dirX, y: snake[0].y + dirY}
+            snake.unshift(head)
+
+            foodEaten = (snake[0].x === foodX && snake[0].y === foodY)
+            if (foodEaten) {
+                updateScore()
+                drawFood()
+            } else {
+                snake.pop()
+            }
+        }
+
+        // game engine
+        const isGameOver = () => {
+            for (let i = 4; i < snake.length; i++){
+                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+                    return(true)
+                }
+            }
+            
+            let hitRightWall = snake[0].x > (gameboard.width - PIXEL_SIZE)
+            let hitLeftWall = snake[0].x < 0
+
+            let hitBottomWall = snake[0].y > (gameboard.height - PIXEL_SIZE)
+            let hitTopWall = snake[0].y < 0
+
+            return(hitRightWall || hitLeftWall || hitBottomWall || hitTopWall)
+        }
+
+        const main = () => {
+            
+            if(!isGameOver()) {
+            setTimeout(() => { 
+                clearBoard()
+                drawGrid()
+                drawFood()
+                moveSnake()
+                drawSnake()
+                main()
+            }, SNAKE_SPEED)
+        } else {
+            alert("GAME OVER!")
+        }
+    }
+
+        initSnake()
+        main()
+    </script>
+</body>
+</html>
